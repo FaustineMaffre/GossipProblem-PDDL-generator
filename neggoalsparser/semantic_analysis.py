@@ -1,5 +1,5 @@
 from pypeg2 import parse
-from neggoals.Parser import Sets
+from neggoalsparser.parser import Sets
 
 """ Generates a set of fluents from a parsed Set.
 """
