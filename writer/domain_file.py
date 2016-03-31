@@ -1,9 +1,9 @@
 """ Writes the domain file.
 """
 
-from utils1 import depth, agts
-from atomsbase.atom1 import Atom
-from atomsbase.base1 import generate_all_sequences
+from utils import depth, agts
+from atomsbase.atom import Atom
+from atomsbase.base import generate_all_sequences
 
 """ Generates the visibility predicate for the given depth, of the form
 'S ?i1 ... ?id ?s'.
