@@ -11,7 +11,7 @@ from writer.problem_file import print_problem_file
 
 
 #print(len(sys.argv)) # TODO test d >= 1 and n >= 2
-utils.set_parameters(2, 4)
+utils.set_parameters(2, 5)
 
 base = Base()
 

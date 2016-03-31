@@ -9,7 +9,7 @@ from atomsbase.base import generate_all_sequences
 'S ?i1 ... ?id ?s'.
 """
 def visibility_predicate(d):
-    return '(S ' + ''.join('?i' + str(i) + ' ' for i in range(1, d+1)) + '?s)'
+    return '(S-' + str(d) + ' ' + ''.join('?i' + str(i) + ' ' for i in range(1, d+1)) + '?s)'
 
 
 """ Generates the conditional effect corresponding to the given atom during a
@@ -52,10 +52,10 @@ def str_cond_effects_call(base, i, j):
 """
 def print_domain_file(base, file):
     file.write(';; Gossip problem - PDDL domain file\n')
-    file.write(';; depth: ' + str(depth()) + '; ' + str(len(agts())) + ' agents\n\n')
+    file.write(';; depth ' + str(depth()) + ', ' + str(len(agts())) + ' agents\n\n')
 
     file.write('(define (domain gossip)\n')
-    file.write('\t(requirements\n')
+    file.write('\t(:requirements\n')
     file.write('\t\t:strips :disjunctive-preconditions\n')
     file.write('\t)\n\n')
 

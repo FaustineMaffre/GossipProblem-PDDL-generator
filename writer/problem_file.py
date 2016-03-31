@@ -17,7 +17,7 @@ def str_goal(base):
 """
 def print_problem_file(base, file):
     file.write(';; Gossip problem - PDDL problem file\n')
-    file.write(';; depth: ' + str(depth()) + '; ' + str(len(agts())) + ' agents\n\n')
+    file.write(';; depth ' + str(depth()) + ', ' + str(len(agts())) + ' agents\n\n')
 
     file.write('(define (problem gossip)\n')
     file.write('\t(:domain gossip)\n\n')
