@@ -1,7 +1,7 @@
 """ Represents an atom.
 """
 
-import utils
+import utils1
 
 """ 'Visibility' atom/fluent of the form S_i1 ... S_im s_l, with i1, ..., im, l
 agents and m >= 0.
@@ -36,7 +36,7 @@ class Atom:
     """ Checks if the atom contains a sequence of the form S_i S_i.
     """
     def is_instrospective(self):
-        return utils.are_consecutive_elts_identical(self.vis_list)
+        return utils1.are_consecutive_elts_identical(self.vis_list)
 
     """ Checks if the given agent is the first agent of the visibility list of
     this atom.

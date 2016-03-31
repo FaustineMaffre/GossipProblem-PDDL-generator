@@ -2,8 +2,8 @@
 """
 
 from itertools import product
-from atomsbase.atom import Atom
-from utils import depth, agts, are_consecutive_elts_identical
+from atomsbase.atom1 import Atom
+from utils1 import depth, agts, are_consecutive_elts_identical
 
 """ Generates a list of all possible atoms, with the list of agents and the
 given depth. Does not include introspective atoms.

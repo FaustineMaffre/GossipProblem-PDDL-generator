@@ -1,15 +1,16 @@
 """ Writes the domain file.
 """
 
-from utils import depth, agts
-from atomsbase.atom import Atom
-from atomsbase.base import generate_all_sequences
+from utils1 import depth, agts
+from atomsbase.atom1 import Atom
+from atomsbase.base1 import generate_all_sequences
 
 """ Generates the visibility predicate for the given depth, of the form
 'S ?i1 ... ?id ?s'.
 """
 def visibility_predicate(d):
-    return '(S-' + str(d) + ' ' + ''.join('?i' + str(i) + ' ' for i in range(1, d+1)) + '?s)'
+    return '(S-' + str(d) + ' ' + ''.join('?i' + str(i) + ' '
+                                          for i in range(1, d+1)) + '?s)'
 
 
 """ Generates the conditional effect corresponding to the given atom during a
@@ -18,8 +19,10 @@ call between i and j, in PDDL. The given atom is assumed to not begin by i or j.
 def str_cond_effect(i, j, atom):
     # precondition: either i or j knows this atom
     pre = '(or ' + \
-          '(and ' + ' '.join(str(eat) for eat in Atom.eatm(Atom.precede_by(atom, [i]))) + ') ' + \
-          '(and ' + ' '.join(str(eat) for eat in Atom.eatm(Atom.precede_by(atom, [j]))) + ')' + \
+          '(and ' + ' '.join(str(eat)
+                             for eat in Atom.eatm(Atom.precede_by(atom, [i]))) + ') ' + \
+          '(and ' + ' '.join(str(eat)
+                             for eat in Atom.eatm(Atom.precede_by(atom, [j]))) + ')' + \
           ') '
 
     # effect: any non-introspective sequence of i and j followed by the atom

@@ -1,7 +1,7 @@
 """ Writes the problem file.
 """
 
-from utils import depth, agts
+from utils1 import depth, agts
 
 """ Generates the string representing the goal.
 """

@@ -4,14 +4,14 @@ By default, there are equal to 1 and 6 respectively.
 """
 
 import sys
-import utils
-from atomsbase.base import Base
-from writer.domain_file import print_domain_file
-from writer.problem_file import print_problem_file
+import utils1
+from atomsbase.base1 import Base
+from writer.domain_file1 import print_domain_file
+from writer.problem_file1 import print_problem_file
 
 
 #print(len(sys.argv)) # TODO test d >= 1 and n >= 2
-utils.set_parameters(2, 5)
+utils1.set_parameters(2, 5)
 
 base = Base()
 
