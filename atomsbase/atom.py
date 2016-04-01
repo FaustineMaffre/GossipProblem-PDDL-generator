@@ -31,7 +31,8 @@ class Atom:
     """ Checks if the atom is of the form S_i s_i or s_i.
     """
     def is_initial(self):
-        return len(self.vis_list) == 1 and self.vis_list[0] == self.secret
+        return len(self.vis_list) == 0 or \
+               (len(self.vis_list) == 1 and self.vis_list[0] == self.secret)
 
     """ Checks if the atom contains a sequence of the form S_i S_i.
     """

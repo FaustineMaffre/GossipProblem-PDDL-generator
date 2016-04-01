@@ -1,41 +1,6 @@
-""" Generates and keeps the whole list of atoms and their value in the goal.
+""" Keeps the whole list of atoms and their value in the goal.
 """
-
-from itertools import product
-from atomsbase.atom import Atom
-from utils import depth, agts, are_consecutive_elts_identical
-
-""" Generates a list of all possible atoms, with the list of agents and the
-given depth. Does not include introspective atoms.
-"""
-def generate_all_atoms(depth):
-    res = []
-
-    for d in range(1, depth+2):
-        for t in product(agts(), repeat=d):
-            atom = Atom(t[-1], list(t[:-1]))
-
-            if not atom.is_instrospective():
-                res.append(atom)
-
-    return res
-
-
-""" Generates all lists of i and j of the given maximal length, such that no
-list contains two identical consecutive elements.
-"""
-def generate_all_sequences(i, j, depth):
-    res = []
-
-    for d in range(1, depth+1):
-        for t in product([i,j], repeat=d):
-            l = list(t)
-
-            if not are_consecutive_elts_identical(l):
-                res.append(l)
-
-    return res
-
+from utils import depth, generate_all_atoms_up_to
 
 """ Contains every possible atom, associated with a boolean indicating if they
 should by positive or negative in the goal.
@@ -43,9 +8,9 @@ Atoms are organized in dictionaries with atoms of the same depth. They are all
 initialized to true.
 Introspective atoms are not included.
 """
-class Base:
+class Goal:
     def __init__(self):
-        all_atoms = generate_all_atoms(depth())
+        all_atoms = generate_all_atoms_up_to(depth())
 
         # list of dictionaries, one for each depth between 0 and DEPTH
         self.values = []

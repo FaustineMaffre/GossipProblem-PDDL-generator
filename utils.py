@@ -1,6 +1,9 @@
 """ Contains the parameters of the problem (depth and number of agents)
 and several useful functions.
 """
+from itertools import product
+
+from atomsbase.atom import Atom
 
 """ Sets the parameters.
 """
@@ -18,10 +21,42 @@ def depth():
     return DEPTH
 
 
-""" Returns the list of agents.
+""" Returns (a copy of) the list of agents.
 """
 def agts():
-    return AGTS
+    return AGTS[:]
+
+
+""" Generates a list of all possible atoms up to the given depth.
+Does not include introspective atoms.
+"""
+def generate_all_atoms_up_to(depth):
+    res = []
+
+    for d in range(1, depth+2):
+        for t in product(agts(), repeat=d):
+            atom = Atom(t[-1], list(t[:-1]))
+
+            if not atom.is_instrospective():
+                res.append(atom)
+
+    return res
+
+
+""" Generates all lists of i and j of the given maximal length, such that no
+list contains two identical consecutive elements.
+"""
+def generate_all_sequences_up_to(i, j, depth):
+    res = []
+
+    for d in range(1, depth+1):
+        for t in product([i,j], repeat=d):
+            l = list(t)
+
+            if not are_consecutive_elts_identical(l):
+                res.append(l)
+
+    return res
 
 
 """ Checks if there is two consecutive elements of this list that are equal.

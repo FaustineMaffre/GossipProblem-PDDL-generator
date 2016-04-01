@@ -50,11 +50,18 @@ integer.
 class Cst(List):
     grammar = AgtName, Comp, [AgtName, Int]
 
+    def __repr__(self):
+        return self[0].name + ' ' + self[1] + ' ' + \
+               (self[2].name if type(self[2]) == AgtName else self[2].nb)
+
 
 """ Conjunction of constraints, separared by '&'.
 """
 class Csts(List):
     grammar = csl(Cst, separator='&')
+
+    def __repr__(self):
+        return ' & '.join(str(cst) for cst in self)
 
 
 """ Sequence of agents, separated by '-'.
@@ -62,11 +69,17 @@ class Csts(List):
 class Agts(List):
     grammar = csl(AgtName, separator='-')
 
+    def __repr__(self):
+        return '-'.join(i.name for i in self)
+
 
 """ Sequence of 'instantiated' agents (that is, integers), separated by '-'.
 """
 class AgtsInst(List):
     grammar = csl(Int, separator='-')
+
+    def __repr__(self):
+        return '-'.join(str(i.nb) for i in self)
 
 
 """ Several sequences of instantiated agents, separated by ','.
@@ -74,12 +87,19 @@ class AgtsInst(List):
 class AgtsInsts(List):
     grammar = csl(AgtsInst, separator=',')
 
+    def __repr__(self):
+        return ', '.join(str(ai) for ai in self)
 
-""" Set: either agents, possibly followed by constraints (specified by ':'), or
-sequences of instantiated agents, separated by ','.
+
+""" Set: either agents followed by constraints (specified by ':'), or sequences
+of instantiated agents, separated by ','.
 """
 class Set(List):
-    grammar = '{', [(Agts, optional(':', Csts)), AgtsInsts], '}'
+    grammar = '{', [(Agts, ':', Csts), AgtsInsts], '}'
+
+    def __repr__(self):
+        return '{' + str(self[0]) + \
+               (' : ' + str(self[1]) if type(self[0]) == Agts else '') + '}'
 
 
 """ Union of sets, separated by 'U'.

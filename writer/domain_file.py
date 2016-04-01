@@ -1,9 +1,8 @@
 """ Writes the domain file.
 """
 
-from utils import depth, agts
+from utils import depth, agts, generate_all_sequences_up_to
 from atomsbase.atom import Atom
-from atomsbase.base import generate_all_sequences
 
 """ Generates the visibility predicate for the given depth, of the form
 'S ?i1 ... ?id ?s'.
@@ -28,7 +27,7 @@ def str_cond_effect(i, j, atom):
     # effect: any non-introspective sequence of i and j followed by the atom
     add = '(and ' + \
           ' '.join([str(Atom.precede_by(atom, seq))
-                   for seq in generate_all_sequences(i, j, depth()-atom.depth())]) + \
+                    for seq in generate_all_sequences_up_to(i, j, depth() - atom.depth())]) + \
           ')'
 
     return '(when ' + pre + add + ')'
