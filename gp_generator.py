@@ -4,21 +4,47 @@ By default, there are equal to 1 and 6 respectively.
 """
 
 import sys
-import utils
+from utils import depth, agts, set_parameters
 from neggoalsparser.parser import parse, Sets
 from neggoalsparser.semantic_analysis import update_negative_goals
 from atomsbase.goal import Goal
 from writer.domain_file import print_domain_file
 from writer.problem_file import print_problem_file
 
+# depth and number of agents
+d = 1
+na = 6
 
-#print(len(sys.argv)) # TODO test d >= 1 and n >= 2
-utils.set_parameters(2, 5)
+try:
+    if len(sys.argv) == 2:
+        raise Exception()
 
-base = Goal()
+    if len(sys.argv) > 2:
+        d = int(sys.argv[1])
+        na = int(sys.argv[2])
 
-ast = parse('{i-j-k : i!=j & j!=k} U {i-j : i!=j} U {i : i>=1} U {1-2-3, 2-3}', Sets)
-print(update_negative_goals(base, ast))
+    if d <= 0 or na <= 1:
+        raise Exception()
+
+    set_parameters(d, na)
+
+    print('Generating atoms for depth ' + str(depth()) + ' and ' +
+          str(len(agts())) + ' agents...')
+    base = Goal()
+
+    # negative goals
+    if len(sys.argv) > 3:
+        ast = parse(sys.argv[3], Sets)
+        update_negative_goals(base, ast)
+
+except Exception:
+    print('Usage: python gp_generator.py '
+          '<depth> <number of agents> [<description of negative goals>]')
+    print('with <depth> >= 1 and <number of agents> >= 2')
+    sys.exit(1)
+
+# write files
+print('Writing files...')
 
 domain_file = open('domain.pddl', 'w')
 problem_file = open('problem.pddl', 'w')
@@ -28,3 +54,5 @@ print_problem_file(base, problem_file)
 
 domain_file.close()
 problem_file.close()
+
+print('Done.')
