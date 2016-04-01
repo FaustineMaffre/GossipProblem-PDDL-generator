@@ -59,35 +59,46 @@ def classify_csts(s):
 
 
 """ Checks if the given assignment satisfies the given constraint.
+The last parameter indicates whether all agents are assigned. If so, an agent
+not found rises an error.
 """
-def assignment_verify_bin_cst(assign, cst):
-    try:
-        assign_l = assign[cst[0].name]
-    except KeyError:
-        print('Agent ' + cst[0].name + ' not defined (constraint ' +
-              str(cst) + ')')
-        sys.exit(1)
+def assignment_verify_bin_cst(assign, cst, full):
+    inst_cst = True
+    assigned_l = None
+    assigned_r = None
 
     try:
-        assign_r = assign[cst[2].name]
+        assigned_l = assign[cst[0].name]
     except KeyError:
-        print('Agent ' + cst[2].name + ' not defined (constraint ' +
-              str(cst) + ')')
-        sys.exit(1)
+        if full:
+            print('Agent ' + cst[0].name + ' not defined (constraint ' +
+                  str(cst) + ')')
+            sys.exit(1)
 
-    return comp_dict[cst[1]](assign_l, assign_r)
+        inst_cst = False
+
+    try:
+        assigned_r = assign[cst[2].name]
+    except KeyError:
+        if full:
+            print('Agent ' + cst[2].name + ' not defined (constraint ' +
+                  str(cst) + ')')
+            sys.exit(1)
+
+        inst_cst = False
+
+    return not inst_cst or comp_dict[cst[1]](assigned_l, assigned_r)
 
 
 """ Checks if the given assignment satisfies the given list of constraints.
 """
-def assignment_verify_bin_csts(assign, csts):
-    return all(assignment_verify_bin_cst(assign, cst) for cst in csts)
+def assignment_verify_bin_csts(assign, csts, full):
+    return all(assignment_verify_bin_cst(assign, cst, full) for cst in csts)
 
 
 """ Recursively computes assignments of agents values (integer) to agents that
 satisfy the given (binary) constraints.
 """
-# TODO cut branches?
 def generate_assignments_bin_csts(doms, csts, assigned_agts):
     res = []
 
@@ -95,7 +106,8 @@ def generate_assignments_bin_csts(doms, csts, assigned_agts):
     to_be_assigned_agts = list(set(doms.keys()) - set(assigned_agts.keys()))
 
     if len(to_be_assigned_agts) == 0:
-        if assignment_verify_bin_csts(assigned_agts, csts): # verify constraints
+        # verify constraints
+        if assignment_verify_bin_csts(assigned_agts, csts, True):
             res = [assigned_agts]
 
     else: # recursive call with one agent's value fixed
@@ -104,7 +116,10 @@ def generate_assignments_bin_csts(doms, csts, assigned_agts):
         for val in doms[agt]:
             new_assigned_agts = assigned_agts.copy()
             new_assigned_agts[agt] = val
-            res += generate_assignments_bin_csts(doms, csts, new_assigned_agts)
+
+            if assignment_verify_bin_csts(new_assigned_agts, csts, False):
+                res += generate_assignments_bin_csts(doms, csts,
+                                                     new_assigned_agts)
 
     return res
 

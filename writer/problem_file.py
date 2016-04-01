@@ -13,6 +13,7 @@ def str_goal(base):
 
     return res
 
+
 """ Generates the problem file (agents, initial state and goal).
 """
 def print_problem_file(base, file):

@@ -39,7 +39,7 @@ try:
 
 except Exception:
     print('Usage: python gp_generator.py '
-          '<depth> <number of agents> [<description of negative goals>]')
+          '<depth> <number of agents> ["<description of negative goals>"]')
     print('with <depth> >= 1 and <number of agents> >= 2')
     sys.exit(1)
 

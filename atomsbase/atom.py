@@ -39,15 +39,10 @@ class Atom:
     def is_instrospective(self):
         return utils.are_consecutive_elts_identical(self.vis_list)
 
-    """ Checks if the given agent is the first agent of the visibility list of
-    this atom.
-    """
-    def begins_with(self, i):
-        return len(self.vis_list) > 0 and self.vis_list[0] == i
-
     """ Returns a new atom with the given list added at the beginning of the
     visibility list.
     """
+    @staticmethod
     def precede_by(atom, l):
         return Atom(atom.secret, l + atom.vis_list)
 
@@ -57,6 +52,7 @@ class Atom:
     For example, atom (2, [3,1]), here meaning K_3 K_1 s_2, is true if
     s_2, S_1 s_2, S_3 s_2, and S_3 S_1 s_2 are true.
     """
+    @staticmethod
     def eatm(atom):
         if len(atom.vis_list) == 0:
             res = [Atom(atom.secret)]
