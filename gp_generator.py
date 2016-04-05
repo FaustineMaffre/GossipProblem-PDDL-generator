@@ -5,7 +5,7 @@ By default, there are equal to 1 and 6 respectively.
 
 import sys
 from utils import depth, nb_agts, set_parameters, ParameterError
-from neggoalsparser.parser import parse, Sets
+from neggoalsparser.parser import parseSet
 from neggoalsparser.semantic_analysis import update_negative_goals
 from atomsbase.goal import Goal
 from writer.domain_file import print_domain_file
@@ -34,7 +34,7 @@ try:
 
     # negative goals
     if len(sys.argv) > 3:
-        ast = parse(sys.argv[3], Sets)
+        ast = parseSet(sys.argv[3])
         print('Generating negative goals ' + str(ast) + '...')
         update_negative_goals(base, ast)
 

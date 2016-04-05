@@ -110,6 +110,18 @@ class Sets(List):
     def __repr__(self):
         return ' U '.join(str(s) for s in self)
 
+
+""" Parses a string as Sets.
+"""
+def parseSet(s):
+    try:
+        res = parse(s, Sets)
+    except SyntaxError:
+        print('Error: syntax error in negative goals.')
+        sys.exit(1)
+
+    return res
+
 # test1 = '{i1-j-k : i1>=1 & j<2} U {i-j: i!=j} U {i}'
 # test2 = '{1-10-6}'
 # test3 = test1 + ' U ' + test2
