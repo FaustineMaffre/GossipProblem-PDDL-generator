@@ -79,7 +79,7 @@ class AgtsInst(List):
     grammar = csl(Int, separator='-')
 
     def __repr__(self):
-        return '-'.join(str(i.nb) for i in self)
+        return '-'.join(i.nb for i in self)
 
 
 """ Several sequences of instantiated agents, separated by ','.

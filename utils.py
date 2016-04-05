@@ -27,6 +27,12 @@ def agts():
     return AGTS[:]
 
 
+""" Returns the number of agents.
+"""
+def nb_agts():
+    return len(AGTS)
+
+
 """ Generates a list of all possible atoms up to the given depth.
 Does not include introspective atoms.
 """

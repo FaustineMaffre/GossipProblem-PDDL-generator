@@ -1,7 +1,7 @@
 """ Writes the problem file.
 """
 
-from utils import depth, agts
+from utils import depth, agts, nb_agts
 
 """ Generates the string representing the goal.
 """
@@ -18,7 +18,7 @@ def str_goal(base):
 """
 def print_problem_file(base, file):
     file.write(';; Gossip problem - PDDL problem file\n')
-    file.write(';; depth ' + str(depth()) + ', ' + str(len(agts())) + ' agents\n\n')
+    file.write(';; depth ' + str(depth()) + ', ' + str(nb_agts()) + ' agents\n\n')
 
     file.write('(define (problem gossip)\n')
     file.write('\t(:domain gossip)\n\n')

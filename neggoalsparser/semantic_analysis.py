@@ -3,7 +3,7 @@ import sys
 
 from atomsbase.atom import Atom
 from neggoalsparser.parser import Int, AgtsInsts
-from utils import depth, agts, SemanticError
+from utils import depth, agts, nb_agts, SemanticError
 
 # set_parameters(2, 3)
 
@@ -27,7 +27,7 @@ def apply_un_csts(doms, csts):
         try:
             doms[cst[0].name] = apply_un_cst(doms[cst[0].name], cst)
         except KeyError:
-            print('Agent ' + cst[0].name + ' not defined (constraint ' +
+            print('Error: agent ' + cst[0].name + ' not defined (constraint ' +
                   str(cst) + ')')
             sys.exit(1)
 
@@ -61,7 +61,7 @@ def assignment_verify_bin_cst(assign, cst, full):
         assigned_l = assign[cst[0].name]
     except KeyError:
         if full:
-            print('Agent ' + cst[0].name + ' not defined (constraint ' +
+            print('Error: agent ' + cst[0].name + ' not defined (constraint ' +
                   str(cst) + ')')
             sys.exit(1)
 
@@ -71,7 +71,7 @@ def assignment_verify_bin_cst(assign, cst, full):
         assigned_r = assign[cst[2].name]
     except KeyError:
         if full:
-            print('Agent ' + cst[2].name + ' not defined (constraint ' +
+            print('Error: agent ' + cst[2].name + ' not defined (constraint ' +
                   str(cst) + ')')
             sys.exit(1)
 
@@ -130,7 +130,7 @@ def generate_atoms_non_inst_set(s):
     ordering_agts = [i.name for i in s[0]]
 
     if len(ordering_agts) > depth()+1:
-        raise SemanticError('Depth of ' + str(s[0]) +
+        raise SemanticError('depth of ' + str(s[0]) +
                             ' greater than the depth of the problem (' +
                             str(depth()) + ')')
 
@@ -149,7 +149,7 @@ def generate_atoms_non_inst_set(s):
         atom = atom_from_assignment(assign, ordering_agts)
 
         if atom.is_instrospective():
-            raise SemanticError('Introspective atoms are forbidden (found ' +
+            raise SemanticError('introspective atoms are forbidden (found ' +
                                 str(atom) + ' in ' + str(s) + ')')
 
         res.append(atom)
@@ -163,17 +163,24 @@ def generate_atoms_inst_set(s):
     res = []
 
     for inst in s[0]:
-        values = [i.nb for i in inst]
+        values = [int(i.nb) for i in inst]
 
+        # depth
         if len(values) > depth() + 1:
-            raise SemanticError('Depth of ' + str(inst) +
+            raise SemanticError('depth of ' + str(inst) +
                                 ' greater than the depth of the problem (' +
                                 str(depth()) + ')')
 
+        # incorrect agents
+        if any(i > nb_agts() for i in values):
+            raise SemanticError('incorrect agents in ' + str(inst) +
+                                ' (max ' + str(nb_agts()) + ')')
+
         atom = Atom(values[-1], values[:-1])
 
+        # introspective
         if atom.is_instrospective():
-            raise SemanticError('Introspective atoms are forbidden (found ' +
+            raise SemanticError('introspective atoms are forbidden (found ' +
                                 str(atom) + ' in ' + str(s) + ')')
 
         res.append(atom)
@@ -192,8 +199,8 @@ def generate_atoms_set(s):
 
     # signal if some atoms were removed
     if any(atom.is_initial() for atom in res):
-        print('Initial atoms (secrets s_i or atoms S_i s_i) were found and ' +
-              'removed (unsolvable problem otherwise).')
+        print('Warning: initial atoms (secrets s_i or atoms S_i s_i) ' +
+              'were found and removed (unsolvable problem otherwise).')
 
     return [atom for atom in res if not atom.is_initial()]
 
@@ -201,18 +208,24 @@ def generate_atoms_set(s):
 """ Generates a list of atoms from parsed Sets, without duplicates.
 """
 def generate_atoms_sets(ss):
-    return list(set.union(*[set(generate_atoms_set(s)) for s in ss]))
+    try:
+        res = list(set.union(*[set(generate_atoms_set(s)) for s in ss]))
+    except SemanticError as e:
+        print('Error: ' + str(e))
+        sys.exit(1)
+
+    if len(res) == 0:
+        print('Warning: no negative goal.')
+
+    return res
 
 
 """ Updates the goal by negating the described sets of atoms.
 """
 def update_negative_goals(base, ss):
-    try:
-        for neg_atom in generate_atoms_sets(ss):
-            base.set_value(neg_atom, False)
-    except SemanticError as e:
-        print(e)
-        sys.exit(1)
+    for neg_atom in generate_atoms_sets(ss):
+        base.set_value(neg_atom, False)
+
 
 
 # ast = parse('{i-j-k : i!=j & j!=k} U {i-j : i!=j} U {i : i>=1} U {1-2-3, 2-3}', Sets)

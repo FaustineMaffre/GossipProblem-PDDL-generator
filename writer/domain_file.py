@@ -1,7 +1,7 @@
 """ Writes the domain file.
 """
 
-from utils import depth, agts, generate_all_sequences_up_to
+from utils import depth, nb_agts, generate_all_sequences_up_to
 from atomsbase.atom import Atom
 
 """ Generates the visibility predicate for the given depth, of the form
@@ -62,7 +62,7 @@ def str_cond_effects_call(base):
 def print_domain_file(base, file):
     file.write(';; Gossip problem - PDDL domain file\n')
     file.write(';; depth ' + str(depth()) + ', ' +
-               str(len(agts())) + ' agents\n\n')
+               str(nb_agts()) + ' agents\n\n')
 
     file.write('(define (domain gossip)\n')
     file.write('\t(:requirements\n')
