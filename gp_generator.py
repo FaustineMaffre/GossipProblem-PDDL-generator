@@ -4,7 +4,7 @@ By default, there are equal to 1 and 6 respectively.
 """
 
 import sys
-from utils import depth, agts, set_parameters
+from utils import depth, agts, set_parameters, ParameterError
 from neggoalsparser.parser import parse, Sets
 from neggoalsparser.semantic_analysis import update_negative_goals
 from atomsbase.goal import Goal
@@ -17,14 +17,14 @@ na = 6
 
 try:
     if len(sys.argv) == 2:
-        raise Exception()
+        raise ParameterError('Wrong number of parameters.')
 
     if len(sys.argv) > 2:
         d = int(sys.argv[1])
         na = int(sys.argv[2])
 
     if d <= 0 or na <= 1:
-        raise Exception()
+        raise ParameterError('Wrong value for <depth> or <number of agents>')
 
     set_parameters(d, na)
 
@@ -35,12 +35,14 @@ try:
     # negative goals
     if len(sys.argv) > 3:
         ast = parse(sys.argv[3], Sets)
+        print('Negative goals: ' + str(ast))
         update_negative_goals(base, ast)
 
-except Exception:
-    print('Usage: python gp_generator.py '
-          '<depth> <number of agents> ["<description of negative goals>"]')
-    print('with <depth> >= 1 and <number of agents> >= 2')
+except ParameterError as e:
+    print(e)
+    print('Usage: python gp_generator.py ' +
+          '<depth> <number of agents> ["<description of negative goals>"] ' +
+          'with <depth> >= 1 and <number of agents> >= 2')
     sys.exit(1)
 
 # write files

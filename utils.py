@@ -63,3 +63,23 @@ def generate_all_sequences_up_to(i, j, depth):
 """
 def are_consecutive_elts_identical(l):
     return any(e1 == e2 for (e1, e2) in zip(l, l[1:]))
+
+
+""" Error happening during the reading of the parameters given to the program.
+"""
+class ParameterError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __repr__(self):
+        return self.value
+
+
+""" Error happening during the semantic analysis.
+"""
+class SemanticError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __repr__(self):
+        return self.value

@@ -1,9 +1,9 @@
-import sys
 import operator
+import sys
 
-from neggoalsparser.parser import Int, AgtsInsts
-from utils import depth, agts
 from atomsbase.atom import Atom
+from neggoalsparser.parser import Int, AgtsInsts
+from utils import depth, agts, SemanticError
 
 # set_parameters(2, 3)
 
@@ -11,16 +11,6 @@ from atomsbase.atom import Atom
 """
 comp_dict = {'=' : operator.eq, '!=' : operator.ne, '<=' : operator.le,
              '>=' : operator.ge, '<' : operator.lt, '>' : operator.gt}
-
-
-""" Error happening during the semantic analysis.
-"""
-class SemanticError(Exception):
-    def __init__(self, value):
-        self.value = value
-
-    def __repr__(self):
-        return self.value
 
 
 """ Applies a 'unary' constraint (a constraint involving an agent and an
@@ -140,7 +130,7 @@ def generate_atoms_non_inst_set(s):
     ordering_agts = [i.name for i in s[0]]
 
     if len(ordering_agts) > depth()+1:
-        raise SemanticError('depth of ' + str(s[0]) +
+        raise SemanticError('Depth of ' + str(s[0]) +
                             ' greater than the depth of the problem (' +
                             str(depth()) + ')')
 
@@ -159,7 +149,7 @@ def generate_atoms_non_inst_set(s):
         atom = atom_from_assignment(assign, ordering_agts)
 
         if atom.is_instrospective():
-            raise SemanticError('introspective atoms are forbidden (found ' +
+            raise SemanticError('Introspective atoms are forbidden (found ' +
                                 str(atom) + ' in ' + str(s) + ')')
 
         res.append(atom)
@@ -176,14 +166,14 @@ def generate_atoms_inst_set(s):
         values = [i.nb for i in inst]
 
         if len(values) > depth() + 1:
-            raise SemanticError('depth of ' + str(inst) +
+            raise SemanticError('Depth of ' + str(inst) +
                                 ' greater than the depth of the problem (' +
                                 str(depth()) + ')')
 
         atom = Atom(values[-1], values[:-1])
 
         if atom.is_instrospective():
-            raise SemanticError('introspective atoms are forbidden (found ' +
+            raise SemanticError('Introspective atoms are forbidden (found ' +
                                 str(atom) + ' in ' + str(s) + ')')
 
         res.append(atom)
@@ -217,9 +207,12 @@ def generate_atoms_sets(ss):
 """ Updates the goal by negating the described sets of atoms.
 """
 def update_negative_goals(base, ss):
-    for neg_atom in generate_atoms_sets(ss):
-        base.set_value(neg_atom, False)
-
+    try:
+        for neg_atom in generate_atoms_sets(ss):
+            base.set_value(neg_atom, False)
+    except SemanticError as e:
+        print(e)
+        sys.exit(1)
 
 
 # ast = parse('{i-j-k : i!=j & j!=k} U {i-j : i!=j} U {i : i>=1} U {1-2-3, 2-3}', Sets)
