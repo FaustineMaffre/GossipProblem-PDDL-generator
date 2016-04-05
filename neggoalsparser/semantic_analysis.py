@@ -217,6 +217,10 @@ def generate_atoms_sets(ss):
     if len(res) == 0:
         print('Warning: no negative goal.')
 
+    print('Some negative goals generated: ' +
+          (', '.join(str(a) for a in res[:10])) +
+          (', ...' if len(res) > 10 else ''))
+
     return res
 
 
