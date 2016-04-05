@@ -35,7 +35,7 @@ try:
     # negative goals
     if len(sys.argv) > 3:
         ast = parse(sys.argv[3], Sets)
-        print('Generating negative goals (' + str(ast) + ')...')
+        print('Generating negative goals ' + str(ast) + '...')
         update_negative_goals(base, ast)
 
 except ParameterError as e:

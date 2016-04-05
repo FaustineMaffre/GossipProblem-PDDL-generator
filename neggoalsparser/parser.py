@@ -107,6 +107,8 @@ class Set(List):
 class Sets(List):
     grammar = csl(Set, separator='U')
 
+    def __repr__(self):
+        return ' U '.join(str(s) for s in self)
 
 # test1 = '{i1-j-k : i1>=1 & j<2} U {i-j: i!=j} U {i}'
 # test2 = '{1-10-6}'
