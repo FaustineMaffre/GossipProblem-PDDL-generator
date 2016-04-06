@@ -20,7 +20,7 @@ Csts ::= Cst | Csts & Csts
 Agts ::= AgtName | Agts-Agts
 AgtsInst ::= Int | AgtsInst-AgtsInst
 AgtsInsts ::= AgtsInst | AgtsInsts, AgtsInsts
-Set ::= {Agts} | {Agts : Csts} | {AgtsInsts}
+Set ::= {Agts : Csts} | {AgtsInsts}
 Sets ::= Set | Sets U Sets
 """
 
