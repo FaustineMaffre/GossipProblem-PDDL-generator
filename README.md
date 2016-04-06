@@ -68,6 +68,9 @@ the goal is that everyone knows everything up to the given depth *d*
 With negative goals, every atom except the ones specified must be true,
 and those must be false.
 
+Please see the paper if you want more details on the logic or
+the gossip problem formalization.
+
 
 
 ### The generator
@@ -165,7 +168,7 @@ a lower-case letter.
 - The specification of sets must take care
 not to contain 'introspective atoms',
 i.e., atoms containing at least two consecutive identical agents
-(for instance, i-j-j-k).
+(for instance, *i-j-j-k*).
 (Please see the paper for more details on actions in normal form.)
 - The specification of sets should not contain 'initial atoms', that is,
 secrets or visibility of an agent on her own secret.
