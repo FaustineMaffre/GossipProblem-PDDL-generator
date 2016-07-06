@@ -125,7 +125,7 @@ The first type of set (*instantiated sets*)
 enumerates the atoms that should be false.
 For example:
 
-`{1-2, 1-2-3}`
+`{1-2,1-2-3}`
 
 indicates that *1* should not know the secret of *2* and that
 *1* should not know whether *2* knows the secret of *3*
